@@ -1,12 +1,19 @@
 package kz.seisen.ChainOfResponsibility;
 
+import kz.seisen.ChainOfResponsibility.Logger.CustomLogger;
+
 class SeniorSupportHandler extends SupportHandler {
+    @Override
     public boolean handle(String issue) {
-        if (issue.equals("account_ban") || issue.equals("data_loss")) {
+        if (logger != null) {
+            logger.log(CustomLogger.DEBUG, "[SeniorSupport] Received issue: " + issue);
+        }
+        if ("account_ban".equals(issue) || "data_loss".equals(issue)) {
             System.out.println("[SeniorSupport] Handled " + issue);
             return true;
         }
-        System.out.println("[SeniorSupport] Cannot handle " + issue + " — escalate manually");
-        return false;
+        String msg = "[SeniorSupport] Cannot handle " + issue + " — escalate manually";
+        System.out.println(msg);
+        throw new UnresolvedIssueException(msg);
     }
 }
